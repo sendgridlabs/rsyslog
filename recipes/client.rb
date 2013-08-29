@@ -27,6 +27,11 @@ elsif !node['rsyslog']['server']
   if node['rsyslog']['server_ip']
     # handle node['rsyslog']['server_ip'] being a string or an array
     rsyslog_servers = Array(node['rsyslog']['server_ip'])
+  else
+    # add all syslog servers to the syslog_servers array
+    search(:node, node["rsyslog"]["server_search"]) do |result|
+      rsyslog_servers << result['ipaddress']
+    end
   end
 
   # add all syslog servers to the syslog_servers array
